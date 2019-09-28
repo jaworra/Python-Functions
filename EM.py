@@ -1,5 +1,8 @@
-# import libraries
+#expectation–maximization (EM) algorithm is an iterative method to find maximum likelihood or maximum a posteriori (MAP) estimates
+#of parameters in statistical models, where the model depends on unobserved latent variables.
 
+#
+# import libraries
 # For plotting
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -16,6 +19,8 @@ from random import uniform
 print("import done")
 
 
+
+#enerate the data yourself Select  μ1,σ1  and  μ2,σ2  to generate the data
 Mean1 = 2  # Input parameter, mean of first normal probability distribution
 Standard_dev1 = 4 #@param {type:"number"}
 Mean2 = 9 # Input parameter, mean of second normal  probability distribution
@@ -51,10 +56,12 @@ class Gaussian:
 
     def __repr__(self):
         return 'Gaussian({0:4.6}, {1:4.6})'.format(self.mu, self.sigma)
-
-
 print("done")
 
+
+
+#A single Gaussion will not fit the data well
+#Calculating the mean and standard deviation of the dataset shows it does not fit well
 
 #gaussian of best fit
 best_single = Gaussian(np.mean(data), np.std(data))
@@ -190,6 +197,17 @@ g_right = [best_mix.two.pdf(e) * (1-best_mix.mix) for e in x]
 plt.plot(x, g_right, label='gaussian two');
 plt.legend();
 
+#Results
+#The models nicely estimates our own mean entered μ and σ. With this understanding it is not hard to imagine to extend this to n-Gaussians or m-dimensions.
+#You don't need to write complax code since these algorithms have been implemented in some excellent libraries.
+
+#he Algorithm would be numerical enhanced by normalizing the data first, next do all the EM steps and do the de-normalising at the end.
+
+
+#sklearn GaussianMixture
+#Or we could make use of a library that already has the functionality implemented.
+# The sklearn GaussianMixture object implements the expectation-maximization (EM) algorithm for fitting mixture-of-Gaussian models.
+# A GaussianMixture.fit method is provided that learns a Gaussian Mixture Model from train data. Now you can try yourself with n-Gaussians or m-dimensions
 
 from sklearn.mixture import GaussianMixture
 gmm = GaussianMixture(n_components = 2, tol=0.000001)
@@ -204,3 +222,5 @@ sns.distplot(data, bins=20, kde=False, norm_hist=True)
 gmm_sum = np.exp([gmm.score_samples(e.reshape(-1, 1)) for e in x]) #gmm gives log probability, hence the exp() function
 plt.plot(x, gmm_sum, label='gaussian mixture');
 plt.legend();
+
+
